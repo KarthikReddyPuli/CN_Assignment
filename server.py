@@ -1,7 +1,9 @@
 # first of all import the socket library  
 import socket
 import sys             
-  
+
+SEPARATOR = "<SEPARATOR>"
+BUFFER_SIZE = 4096
 # next create a socket object  
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       
 print ("Socket successfully created") 
@@ -30,8 +32,9 @@ while True:
   
     # Establish connection with client.  
     c, addr = s.accept()      
-    print ('Got connection from', addr ) 
-    f = open('output/file_'+ str(i)+".pdf",'wb')
+    print ('Got connection from', addr )
+    filename = c.recv(BUFFER_SIZE).decode()
+    f = open('output/'+ filename,'wb')
     l = c.recv(1024)
     while (l):
         f.write(l)
