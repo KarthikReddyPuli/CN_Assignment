@@ -8,7 +8,7 @@ if __name__ == '__main__':
     PORT = 1234
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setblocking(1);
+    sock.setblocking(1)
     sock.connect((HOST, PORT))
 
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     print(cert)
 
     # verify server
-    if not cert or ('commonName', 'test') not in cert['subject'][3]: raise Exception("ERROR")
+    #if not cert or ('commonName', 'test') not in cert['subject'][3]: raise Exception("ERROR")
 
     secure_sock.write('hello')
     print(secure_sock.read(1024))

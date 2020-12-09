@@ -25,7 +25,7 @@ if __name__ == '__main__':
     print(cert)
 
     # verify client
-    if not cert or ('commonName', 'test') not in cert['subject'][3]: raise Exception("ERROR")
+    #if not cert or ('commonName', 'test') not in cert['subject'][3]: raise Exception("ERROR")
 
     try:
         data = secure_sock.read(1024)
