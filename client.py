@@ -3,8 +3,6 @@ import socket
 import sys
 import os
 
-SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096
 # Create a socket object  
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       
   
