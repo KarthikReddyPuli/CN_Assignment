@@ -13,3 +13,8 @@ python client.py
 See the magic
 
 SSL python files yet to be tested
+
+Commands to generate SSL files
+
+openssl req -new -x509 -days 365 -nodes -out client.pem -keyout client.key
+openssl req -new -x509 -days 365 -nodes -out server.pem -keyout server.key
