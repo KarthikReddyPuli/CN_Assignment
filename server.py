@@ -4,7 +4,7 @@ import sys
 
 BUFFER_SIZE = 4096
 # next create a socket object  
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       
+s = socket.socket()       
 print ("Socket successfully created") 
   
 # reserve a port on your computer in our  
