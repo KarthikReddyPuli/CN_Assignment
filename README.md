@@ -1,6 +1,8 @@
 # CN_Assignment
 Requires Python 3+
 
+Tested on Python 3.9.1
+
 ## File Transfer
 
 Place a test.pdf file in the directory
@@ -29,6 +31,16 @@ openssl req -new -x509 -days 365 -nodes -out client.pem -keyout client.key
 openssl req -new -x509 -days 365 -nodes -out server.pem -keyout server.key
 ```
 
+Command to start server
+```
+python server_ssl.py
+```
+
+Command to start client
+```
+python client_ssl.py
+```
+
 SSL python files yet to be tested
 
 ## Group Chat program
@@ -46,4 +58,5 @@ Similarly run the following command to start client
 python client_chat.py ip port
 ```
 ip = Server IP
+
 port = Server Port
