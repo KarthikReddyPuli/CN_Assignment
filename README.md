@@ -4,7 +4,9 @@ Requires Python 3+
 ## File Transfer
 
 Place a test.pdf file in the directory
+
 Create a directory named output
+
 Start server by running
 ```
 python server.py
@@ -33,14 +35,15 @@ SSL python files yet to be tested
 
 Run following command to start server
 ```
-python server_chat.py <ip> <port>
+python server_chat.py ip port
 ```
-<ip> = Server Bind IP
-<port> = Server Bind port
+ip = Server Bind IP
+
+port = Server Bind port
 
 Similarly run the following command to start client
 ```
-python client_chat.py <ip> <port>
+python client_chat.py ip port
 ```
-<ip> = Server IP
-<port> = Server Port
+ip = Server IP
+port = Server Port
