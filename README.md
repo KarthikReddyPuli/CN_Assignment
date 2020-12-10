@@ -60,3 +60,14 @@ python client_chat.py ip port
 ip = Server IP
 
 port = Server Port
+
+## UDP Multicast
+
+Run the following command to start server
+```
+python server_multi.py
+```
+Similarly run the following command to start client
+```
+python client_multi.py
+```
