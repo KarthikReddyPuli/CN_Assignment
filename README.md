@@ -62,6 +62,7 @@ ip = Server IP
 port = Server Port
 
 ## UDP Multicast
+### Supports only Ipv4
 
 Run the following command to start server
 ```
@@ -71,3 +72,7 @@ Similarly run the following command to start client
 ```
 python client_multi.py
 ```
+
+### Both Ipv4 And Ipv6
+
+Run multicast.py, usage is there in the starting comments of the file
