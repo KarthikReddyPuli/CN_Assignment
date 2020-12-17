@@ -1,38 +1,38 @@
-# first of all import the socket library  
+# Import necessary modules/libraries  
 import socket
 import sys             
-
 BUFFER_SIZE = 4096
-# next create a socket object  
-s = socket.socket()#supports both Ipv4 and Ipv6 with empty parameters       
-print ("Socket successfully created") 
+
+# Create a socket object 'soc_obj'.
+# NO params passed, to support both Ipv4 and Ipv6  
+soc_obj = socket.socket()      
+print ("Socket created successfully ") 
   
-# reserve a port on your computer in our  
-# case it is 12345 but it can be anything 
-port = 12345                
-ip = ''#accepts connections on all networks
-resp_str = 'Thank you for connecting'
-# Next bind to the port  
-# we have not typed any ip in the ip field  
-# instead we have inputted an empty string  
-# this makes the server listen to requests  
-# coming from other computers on the network  
-s.bind((ip, port))        
-print ("socket binded to %s" %(port))  
+# Defining port and ip values  
+# 'ip' intialized to an empty string, 
+# so it is possible for different computers on the network to connect.
+port, ip = 42420, ''             
+
+#Now we bind to the port:
+try:
+    soc_obj.bind((ip, port))        
+    print ("Socket binded to %s" %(port))  
+except:
+    print("Failed to bind socket. Error:" + str(sys.exc_info()))
+    sys.exit()
   
-# put the socket into listening mode  
-s.listen(5)   
-print ("socket is listening")            
+# put the socket into listening mode.Allow to queue up a max of 7 requests.
+soc_obj.listen(7)               
   
-# a forever loop until we interrupt it or  
-# an error occurs  
+# infinite loop for processing requests; can be broken with keyboard interrupt.
 while True:  
   
     # Establish connection with client.  
-    client_socket, client_addr = s.accept()      
-    print ('Got connection from', client_addr )
-    filename = client_socket.recv(BUFFER_SIZE)
-    filename = filename.decode()
+    client_socket, client_addr = soc_obj.accept()      
+    print ('Established connection with:', client_addr)
+    filename = client_socket.recv(BUFFER_SIZE).decode() 
+    print(filename)
+    # Writing the obtained data to file in 'output' folder.
     f = open('output/'+ filename,'wb')
     l = client_socket.recv(1024)
     while (l):
