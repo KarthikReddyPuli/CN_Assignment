@@ -65,12 +65,10 @@ while True:
 
 	list_of_clients.append(conn)
 	x=threading.Thread(target = clientthread,args = (conn,addr,))
-    #x=threading.Thread(clientthread,(conn,addr))
 	x.start()
-	print (str(addr[0]) + str(addr[1]) + " connected")
+	print (str(addr[0]) + ":" + str(addr[1]) + " connected")
 	# creates and individual thread for every user 
 	# that connects 
-	#thread.start_new_thread(clientthread,(conn,addr))
 
 conn.close()
 server.close()

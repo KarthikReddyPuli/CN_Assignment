@@ -1,31 +1,46 @@
-import socket
+MYPORT = 8123
+MYGROUP_4 = '225.0.0.250'
+MYGROUP_6 = 'ff15:7079:7468:6f6e:6465:6d6f:6d63:6173'
+MYTTL = 1 # Increase to reach other networks
+
+import time
 import struct
+import socket
 import sys
 
-multicast_group = '224.3.29.71'
-server_address = ('', 10000)
+def main():
+    group = MYGROUP_6 if "-6" in sys.argv[1:] else MYGROUP_4
+    receiver(group)
 
-# Create the socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+def receiver(group):
+    # Look up multicast group address in name server and find out IP version
+    addrinfo = socket.getaddrinfo(group, None)[0]
 
-# Bind to the server address
-sock.bind(server_address)
+    # Create a socket
+    s = socket.socket(addrinfo[0], socket.SOCK_DGRAM)
 
-# Tell the operating system to add the socket to the multicast group
-# on all interfaces.
-group = socket.inet_aton(multicast_group)
-mreq = struct.pack('4sL', group, socket.INADDR_ANY)
-sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+    # Allow multiple copies of this program on one machine
+    # (not strictly needed)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-# Receive/respond loop
-while True:
+    # Bind it to the port
+    s.bind(('', MYPORT))
 
-    print('\nwaiting to receive message')
-    data, address = sock.recvfrom(1024)
-    
-    print(f"Received {len(data)} bytes from {address}")
+    group_bin = socket.inet_pton(addrinfo[0], addrinfo[4][0])
+    # Join group
+    if addrinfo[0] == socket.AF_INET: # IPv4
+        mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
+        s.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+    else:
+        mreq = group_bin + struct.pack('@I', 0)
+        s.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
 
-    print(data.decode())
+    # Loop, printing any data we receive
+    while True:
+        data, sender = s.recvfrom(1500)
+        while data[-1:] == '\0': data = data[:-1] # Strip trailing \0's
+        print (str(sender) + '  ' + repr(data))
 
-    print(f'sending conformation to {address}')
-    sock.sendto('confirmation'.encode(), address)
+
+if __name__ == '__main__':
+    main()

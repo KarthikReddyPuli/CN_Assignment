@@ -1,39 +1,33 @@
-import socket
+MYPORT = 8123
+MYGROUP_4 = '225.0.0.250'
+MYGROUP_6 = 'ff15:7079:7468:6f6e:6465:6d6f:6d63:6173'
+MYTTL = 1 # Increase to reach other networks
+
+import time
 import struct
+import socket
 import sys
 
-message = 'test data'
-multicast_group = ('224.3.29.71', 10000)
+def main():
+    group = MYGROUP_6 if "-6" in sys.argv[1:] else MYGROUP_4
+    sender(group)
 
-# Create the datagram socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+def sender(group):
+    addrinfo = socket.getaddrinfo(group, None)[0]
 
-# Set a timeout so the socket does not block indefinitely when trying
-# to receive data.
-sock.settimeout(0.2)
+    s = socket.socket(addrinfo[0], socket.SOCK_DGRAM)
 
-# Set the time-to-live for messages to 1 so they do not go past the
-# local network segment.
-ttl = struct.pack('b', 1)
-sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
+    # Set Time-to-live (optional)
+    ttl_bin = struct.pack('@i', MYTTL)
+    if addrinfo[0] == socket.AF_INET: # IPv4
+        s.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl_bin)
+    else:
+        s.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, ttl_bin)
 
-try:
-
-    # Send data to the multicast group
-    print(f" sending {message}")
-    sent = sock.sendto(message.encode(), multicast_group)
-
-    # Look for responses from all recipients
     while True:
-        print("Waiting to receive")
-        try:
-            data, server = sock.recvfrom(16)
-        except socket.timeout:
-            print('timed out, no more responses')
-            break
-        else:
-            print(f"Received {data.decode()} from {server}")
+        data = repr(time.time())
+        s.sendto((data + '\0').encode(), (addrinfo[4][0], MYPORT))
+        time.sleep(1)
 
-finally:
-    print("Closing Socket")
-    sock.close()
+if __name__ == '__main__':
+    main()
