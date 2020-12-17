@@ -1,36 +1,38 @@
-# Python program to implement client side of chat room. 
 import socket  
 import sys 
 import threading
 
 BUFFER_SIZE = 2048
 
-def recv_and_print(server):
+def recv_and_print(server): #This functions runs in different thread which receives messages from server and prints it
     while True:
         try:
             data = server.recv(BUFFER_SIZE).decode()
             if data:
                 print(data)
-            else:
+            else: #This occures when the server link is broken
                 print("Connection closed by server")
-        except:
+        except: #Error Handler
             continue
     
 
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+# Creating a socket object 'server'.
+# 'AF_NET'-> Ipv4 addressing, 'SOCK_STREAM'-> for TCP protocol.
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#Check for the proper arguments 
 if len(sys.argv) != 3: 
 	print ("Correct usage: script, IP address, port number") 
 	exit() 
+
 IP_address = str(sys.argv[1]) 
 Port = int(sys.argv[2]) 
 server.connect((IP_address, Port))
 
-x=threading.Thread(target = recv_and_print,args = (server,))
-x.start()
+recv_thread=threading.Thread(target = recv_and_print,args = (server,))
+recv_thread.start() #Starts the message receiving thread
 while True: 
     input_msg = input("")
-    server.send(input_msg.encode())
+    server.send(input_msg.encode()) #Waits for input and sends it
 
 
 server.close()
