@@ -31,7 +31,8 @@ while True:
     # Establish connection with client.  
     client_socket, client_addr = s.accept()      
     print ('Got connection from', client_addr )
-    filename = client_socket.recv(BUFFER_SIZE).decode()
+    filename = client_socket.recv(BUFFER_SIZE)
+    filename = filename.decode()
     f = open('output/'+ filename,'wb')
     l = client_socket.recv(1024)
     while (l):
