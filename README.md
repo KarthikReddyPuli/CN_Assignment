@@ -11,12 +11,12 @@ Create a directory named output
 
 Start server by running
 ```
-python server.py
+python3 server.py
 ```
 
 Start client by running
 ```
-python client.py
+python3 client.py
 ```
 
 See the magic
@@ -33,12 +33,12 @@ openssl req -new -x509 -days 365 -nodes -out server.pem -keyout server.key
 
 Command to start server
 ```
-python server_ssl.py
+python3 server_ssl.py
 ```
 
 Command to start client
 ```
-python client_ssl.py
+python3 client_ssl.py
 ```
 
 SSL python files yet to be tested
@@ -47,7 +47,7 @@ SSL python files yet to be tested
 
 Run following command to start server
 ```
-python server_chat.py ip port
+python3 server_chat.py ip port
 ```
 ip = Server Bind IP
 
@@ -55,7 +55,7 @@ port = Server Bind port
 
 Similarly run the following command to start client
 ```
-python client_chat.py ip port
+python3 client_chat.py ip port
 ```
 ip = Server IP
 
@@ -66,11 +66,11 @@ port = Server Port
 
 Run the following command to start server
 ```
-python server_multi.py
+python3 server_multi.py
 ```
 Similarly run the following command to start client
 ```
-python client_multi.py
+python3 client_multi.py
 ```
 
 ### Both Ipv4 And Ipv6
