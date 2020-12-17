@@ -1,34 +1,46 @@
 import socket
 import ssl
+import sys
 
-# client
-if __name__ == '__main__':
 
-    HOST = '127.0.0.1'
-    PORT = 1234
+#defining ip address and port values
+ip_addr, port = '127.0.0.1', 42420
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setblocking(1)
-    sock.connect((HOST, PORT))
+###---- Setting up the client socket ----##
+# Creating a socket object, 'ssl_clientsoc'.
+# 'AF_NET'-> Ipv4 addressing, 'SOCK_STREAM'-> for TCP protocol.
+ssl_clientsoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# Blocking mode of transfer
+ssl_clientsoc.setblocking(1)
 
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.verify_mode = ssl.CERT_REQUIRED
-    context.load_verify_locations('server.pem')
-    context.load_cert_chain(certfile="client.pem", keyfile="client.key")
+# Connect to the server
+try :
+    ssl_clientsoc.connect((ip_addr, port))
+    print(f"Connected to {ip_addr}:{port}.\n") 
+except :
+    print("Failed to establish connection")
+    sys.exit() 
 
-    if ssl.HAS_SNI:
-        secure_sock = context.wrap_socket(sock, server_side=False, server_hostname=HOST)
-    else:
-        secure_sock = context.wrap_socket(sock, server_side=False)
+# Configuring the secure SSL connection:
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context.verify_mode = ssl.CERT_REQUIRED
+context.load_verify_locations('server.pem')
+context.load_cert_chain(certfile="client.pem", keyfile="client.key")
 
-    cert = secure_sock.getpeercert()
-    print(cert)
+if ssl.HAS_SNI:
+    secure_sock = context.wrap_socket(ssl_clientsoc, server_side=False, server_hostname=ip_addr)
+else:
+    secure_sock = context.wrap_socket(ssl_clientsoc, server_side=False)
 
-    # verify server
-    #if not cert or ('commonName', 'test') not in cert['subject'][3]: raise Exception("ERROR")
+cert = secure_sock.getpeercert()
+print("-----------------SERVER INFO-----------------")
+print(cert)
+print("-----------------END-----------------\n")
 
-    secure_sock.write('hello')
-    print(secure_sock.read(1024))
+#ECHO client functionality:
+print("Sending message....")
+secure_sock.write('Test data!'.encode())
+print(f"Response received -> {secure_sock.read(1024).decode()}")
 
-    secure_sock.close()
-    sock.close()
+secure_sock.close()
+ssl_clientsoc.close()
