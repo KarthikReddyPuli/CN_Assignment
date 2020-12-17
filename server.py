@@ -4,14 +4,13 @@ import sys
 
 BUFFER_SIZE = 4096
 # next create a socket object  
-s = socket.socket()       
+s = socket.socket()#supports both Ipv4 and Ipv6 with empty parameters       
 print ("Socket successfully created") 
   
 # reserve a port on your computer in our  
 # case it is 12345 but it can be anything 
-i = 0 
 port = 12345                
-ip = ''
+ip = ''#accepts connections on all networks
 resp_str = 'Thank you for connecting'
 # Next bind to the port  
 # we have not typed any ip in the ip field  
@@ -30,15 +29,14 @@ print ("socket is listening")
 while True:  
   
     # Establish connection with client.  
-    c, addr = s.accept()      
-    print ('Got connection from', addr )
-    filename = c.recv(BUFFER_SIZE).decode()
+    client_socket, client_addr = s.accept()      
+    print ('Got connection from', client_addr )
+    filename = client_socket.recv(BUFFER_SIZE).decode()
     f = open('output/'+ filename,'wb')
-    l = c.recv(1024)
+    l = client_socket.recv(1024)
     while (l):
         f.write(l)
-        l = c.recv(1024)
+        l = client_socket.recv(1024)
     f.close()
-    c.close()
-    i = i+1
+    client_socket.close()
   

@@ -25,7 +25,7 @@ while True:
     
     print(f"Received {len(data)} bytes from {address}")
 
-    print(data)
+    print(data.decode())
 
-    print(f'sending acknowledgement to {address}')
-    sock.sendto('ack'.encode(), address)
+    print(f'sending conformation to {address}')
+    sock.sendto('confirmation'.encode(), address)

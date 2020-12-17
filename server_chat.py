@@ -67,7 +67,7 @@ while True:
 	x=threading.Thread(target = clientthread,args = (conn,addr,))
     #x=threading.Thread(clientthread,(conn,addr))
 	x.start()
-	print (addr[0] + " connected")
+	print (str(addr[0]) + str(addr[1]) + " connected")
 	# creates and individual thread for every user 
 	# that connects 
 	#thread.start_new_thread(clientthread,(conn,addr))

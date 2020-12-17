@@ -1,7 +1,6 @@
 # Import socket module  
 import socket
 import sys
-import os
 
 # Create a socket object  
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       
@@ -10,7 +9,6 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 port = 12345                
 ip = '127.0.0.1'
 filename = 'test.pdf'
-filesize = os.path.getsize(filename)
 # connect to the server on local computer  
 s.connect((ip, port))
 print(f"Connected to {ip}:{port}")  
